@@ -77,17 +77,31 @@ a GitLab Pages sub-path, and even opened straight from disk.
 
 ## Before going live
 
-- Delete the `people/example-*.md` files and `people/photos/example-postdoc.svg`.
+- Delete `people/example-former-member.md` once a real previous member has a card.
+  (While no one has `former: true`, the Previous members section is hidden.)
+- Ask members to check their own cards. Research descriptions were drafted from
+  public Monash pages, and most students' cards still need a description and photo.
 - Ask supervisors to check the project descriptions in `projects/`. They are
   drafts based on the School's public project listings.
 - Add `leads:` to the experimental research-area pages.
 
 ## Design notes
 
-- Typeface: Archivo (SIL Open Font License), self-hosted in `static/fonts/`.
-  Headings use its wide setting; body text uses the normal width.
+- The site follows the [Monash brand guidelines](https://www.monash.edu/brandbook/brand-elements/colours).
+  Monash blue `#006DAE` is the primary colour, supported by black, white and the
+  greys `#5A5A5A`, `#969696` and `#E6E6E6`. The tertiary blues (heritage
+  `#ABF5F9`, electric `#285AFF`, blueberry `#121256`) are used sparingly.
+- Typeface: Roboto, the Monash web font (SIL Open Font License), self-hosted in `static/fonts/`.
+- **Logo:** download the official Monash University logo (SVG) from the Monash
+  brand portal, save it as `static/img/monash-logo.svg`, and set
+  `logo: monash-logo.svg` in `config.yml`. Until then, the header shows
+  "Monash University" as text next to the school and group name.
+- Card sizes: categories marked `compact: true` in `config.yml` (PhD and Honours
+  by default) and previous members (`former_compact: true`) get half-height
+  cards, with the bio cut to two lines and a "More" button.
+- Category colours: academic Monash blue, postdoc electric blue, PhD
+  blueberry, Honours heritage blue, former grey. They are defined once at the
+  top of `static/site.css`.
 - The home-page hero is a generated "event display": particle tracks curling
-  in a solenoid field, with a new event on every visit. It respects
-  `prefers-reduced-motion`.
-- Category colours (academic blue, postdoc rose, PhD amber, Honours cyan,
-  former grey) are defined once as CSS variables at the top of `static/site.css`.
+  in a solenoid field, drawn on Monash blue, with a new event on every visit.
+  It respects `prefers-reduced-motion`.

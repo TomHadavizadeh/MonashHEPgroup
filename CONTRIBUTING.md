@@ -20,7 +20,7 @@ page is rebuilt automatically once it is merged.
    | `role`     |          | Your title, e.g. `Associate Professor`, `ARC DECRA Fellow` |
    | `photo`    |          | File name of your photo in `people/photos/` |
    | `areas`    |          | Any of `comet`, `lhcb`, `detector-development`, `qcd`, `flavour`, `cosmology` |
-   | `email`, `website`, `inspire`, `orcid`, `github`, `pronouns` | | Optional links and details |
+   | `email`, `office`, `website`, `inspire`, `orcid`, `github`, `pronouns` | | Optional contact details and links |
 
    Below the second `---`, write **two or three sentences about your research**
    (under about 600 characters).

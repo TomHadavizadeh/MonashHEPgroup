@@ -9,12 +9,17 @@ site:
     Theory, phenomenology and experiment at the energy frontier and the
     intensity frontier, from the LHC to the early Universe.
   school: School of Physics and Astronomy, Monash University
+  school_short: School of Physics and Astronomy
+  # Official Monash University logo (get the SVG from the Monash brand portal
+  # and save it as static/img/monash-logo.svg). Leave blank to show a text
+  # placeholder instead.
+  logo:
   address: Clayton campus, Wellington Road, Clayton VIC 3800, Australia
   contact_email: physics@monash.edu          # TODO: replace with the group's contact address
   # Link to the repository (used for the "How to add your card" links).
   # Works with GitHub (https://github.com/org/repo) or GitLab; the site
   # picks the right link format and says "pull request" or "merge request".
-  repo_url: https://github.com/TomHadavizadeh/MonashHEPgroup   # TODO: replace
+  repo_url: https://github.com/your-org/monash-pp-site   # TODO: replace
   default_branch: main
 
 # The two top-level research branches, in menu order.
@@ -37,12 +42,15 @@ categories:
   - key: phd
     label: PhD students
     singular: PhD student
+    compact: true          # half-height card
   - key: honours
     label: Honours students
     singular: Honours student
+    compact: true
 
 # Heading used for anyone with `former: true`.
 former_label: Previous members
+former_compact: true       # previous members also get half-height cards
 
 # Project levels, in the order they appear on the Projects page.
 # The "key" is what goes in the `level:` field of a project file.

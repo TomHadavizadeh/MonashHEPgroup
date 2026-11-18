@@ -7,7 +7,7 @@
   if (!svg) return;
   var NS = "http://www.w3.org/2000/svg";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var COLORS = { hi: "#F2A900", mid: "#3FC1D9", lo: "#E0457B" };
+  var COLORS = { hi: "#FFFFFF", mid: "#ABF5F9", lo: "#121256" };  // white, heritage blue, blueberry
 
   function rng(seed) {             // mulberry32
     return function () {
@@ -91,7 +91,7 @@
       var d = "M" + pts.map(function (p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); }).join("L");
       var path = el("path", {
         d: d, "class": "ed-track", stroke: color,
-        "stroke-width": t.pt > 6 ? 2.2 : 1.4, opacity: t.pt > 6 ? 0.95 : 0.75
+        "stroke-width": t.pt > 6 ? 2.2 : 1.5, opacity: t.pt > 6 ? 0.95 : t.pt > 1.2 ? 0.8 : 0.6
       }, gTracks);
       var delay = (t.pt > 6 ? 0 : 0.25) + (idx % 7) * 0.04;
       if (animate) {
@@ -112,7 +112,7 @@
         var poly = [
           [r1, a - half], [r2, a - half], [r2, a + half], [r1, a + half]
         ].map(function (p) { return (cx + p[0] * Math.cos(p[1])).toFixed(1) + "," + (cy + p[0] * Math.sin(p[1])).toFixed(1); }).join(" ");
-        var cell = el("polygon", { points: poly, fill: color, opacity: 0.55 }, gCalHits);
+        var cell = el("polygon", { points: poly, fill: "#ABF5F9", opacity: 0.5 }, gCalHits);
         if (animate) { cell.style.opacity = 0; cell.style.transition = "opacity .5s ease " + (delay + 1.3).toFixed(2) + "s"; }
       }
     });

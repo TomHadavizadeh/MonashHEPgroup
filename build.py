@@ -41,7 +41,7 @@ BIO_SOFT_LIMIT = 600  # characters; longer bios get a warning, not an error
 
 PERSON_FIELDS = {
     "name", "category", "role", "photo", "areas", "email", "website",
-    "orcid", "inspire", "github", "former", "years", "now", "order", "draft",
+    "orcid", "inspire", "github", "office", "former", "years", "now", "order", "draft",
     "pronouns",
 }
 PROJECT_FIELDS = {
@@ -165,6 +165,7 @@ class Person:
     orcid: str | None
     inspire: str | None
     github: str | None
+    office: str | None
     pronouns: str | None
     former: bool
     years: str | None
@@ -172,6 +173,7 @@ class Person:
     order: int
     bio: Markup
     initials: str
+    compact: bool = False
     area_objs: list = field(default_factory=list)
 
 
@@ -307,6 +309,7 @@ def load_people(cfg: dict, areas: dict[str, Area], problems: Problems) -> list[P
             orcid=meta.get("orcid"),
             inspire=meta.get("inspire"),
             github=meta.get("github"),
+            office=str(meta["office"]) if meta.get("office") else None,
             pronouns=meta.get("pronouns"),
             former=former,
             years=str(meta["years"]) if meta.get("years") else None,
@@ -314,6 +317,8 @@ def load_people(cfg: dict, areas: dict[str, Area], problems: Problems) -> list[P
             order=int(meta.get("order", 100)),
             bio=md_to_html(bio_text),
             initials=initials(name),
+            compact=bool(cfg.get("former_compact")) if former
+                    else bool(cats[cat].get("compact", False)),
         ))
     return people
 

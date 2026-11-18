@@ -23,6 +23,7 @@ areas: [qcd]                            # optional: research areas you work in. 
                                         #   qcd, flavour, cosmology
 
 email: firstname.lastname@monash.edu    # optional
+office: 135A                            # optional: room number
 website: https://example.org            # optional
 inspire: https://inspirehep.net/authors/...   # optional
 orcid: 0000-0000-0000-0000              # optional (just the number)
