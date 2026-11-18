@@ -14,7 +14,7 @@ site:
   # Link to the repository (used for the "How to add your card" links).
   # Works with GitHub (https://github.com/org/repo) or GitLab; the site
   # picks the right link format and says "pull request" or "merge request".
-  repo_url: https://github.com/your-org/monash-pp-site   # TODO: replace
+  repo_url: https://github.com/TomHadavizadeh/MonashHEPgroup   # TODO: replace
   default_branch: main
 
 # The two top-level research branches, in menu order.
