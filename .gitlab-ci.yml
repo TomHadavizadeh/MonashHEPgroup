@@ -1,0 +1,42 @@
+# GitLab CI for the Monash Particle Physics website.
+#
+#  * On every merge request: validate all Markdown files and build the site.
+#    If someone's card has a mistake, the pipeline fails with a clear message
+#    and the built site is attached as an artifact so reviewers can preview it.
+#  * On the default branch: build and publish to GitLab Pages.
+
+image: python:3.12-slim
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths: [.cache/pip]
+
+before_script:
+  - pip install -q -r requirements.txt
+
+stages: [test, deploy]
+
+check:
+  stage: test
+  script:
+    - python build.py --check
+    - python build.py --out preview
+  artifacts:
+    name: "site-preview-$CI_COMMIT_SHORT_SHA"
+    paths: [preview]
+    expire_in: 1 week
+    expose_as: "Site preview"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+
+pages:
+  stage: deploy
+  script:
+    - python build.py --out public
+  artifacts:
+    paths: [public]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

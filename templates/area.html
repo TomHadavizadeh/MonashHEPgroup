@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ area.title }} | {{ site.title }}{% endblock %}
+{% block description %}{{ area.summary }}{% endblock %}
+{% block main %}
+<header class="page-head page-head--area page-head--{{ area.branch }} wrap">
+  <p class="crumb"><a href="{{ root }}index.html#research">{{ branch_label }} research</a></p>
+  <h1>{{ area.title }}</h1>
+  {% if area.summary %}<p class="page-head__lede">{{ area.summary }}</p>{% endif %}
+  {% if area.lead_people %}
+  <p class="area-lead">Led by {% for l in area.lead_people %}{% if l.person %}<a href="{{ root }}people.html#{{ l.person.slug }}">{{ l.name }}</a>{% else %}{{ l.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+  {% endif %}
+</header>
+
+<div class="wrap area-layout">
+  <article class="prose area-body">
+    {{ area.body }}
+    {% if area.links %}
+    <h2>Links</h2>
+    <ul>
+      {% for l in area.links %}<li><a href="{{ l.url }}">{{ l.title }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </article>
+
+  <aside class="area-side">
+    <section>
+      <h2>People</h2>
+      {% if area.people %}
+      <ul class="mini-people">
+        {% for p in area.people %}
+        <li class="mini mini--{{ p.category }}">
+          <span class="mini__avatar">{% if p.photo %}<img src="{{ root }}photos/{{ p.photo }}" alt="" loading="lazy">{% else %}{{ p.initials }}{% endif %}</span>
+          <span><a href="{{ root }}people.html#{{ p.slug }}">{{ p.name }}</a><br><span class="mini__cat">{{ p.category_label }}</span></span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="empty">Members add themselves here by listing <code>{{ area.slug }}</code> under <code>areas</code> in their card.</p>
+      {% endif %}
+    </section>
+    <section>
+      <h2>Open projects</h2>
+      {% if area.projects %}
+      <ul class="mini-projects">
+        {% for pr in area.projects %}
+        <li><a href="{{ root }}projects.html#{{ pr.levels[0] }}-{{ pr.slug }}">{{ pr.title }}</a>
+          <span class="mini__cat">{% for l in pr.levels %}{{ level_labels[l] }}{% if not loop.last %}, {% endif %}{% endfor %}</span></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="empty">No projects are listed for this area yet.</p>
+      {% endif %}
+    </section>
+  </aside>
+</div>
+{% endblock %}

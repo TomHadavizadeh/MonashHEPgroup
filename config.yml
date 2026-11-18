@@ -1,0 +1,58 @@
+# Site-wide settings for the Monash Particle Physics website.
+# Most day-to-day changes happen in people/, projects/ and research/ —
+# you should rarely need to touch this file.
+
+site:
+  title: Monash Particle Physics
+  short_title: Particle Physics
+  tagline: >-
+    Theory, phenomenology and experiment at the energy frontier and the
+    intensity frontier, from the LHC to the early Universe.
+  school: School of Physics and Astronomy, Monash University
+  address: Clayton campus, Wellington Road, Clayton VIC 3800, Australia
+  contact_email: physics@monash.edu          # TODO: replace with the group's contact address
+  # Link to the repository (used for the "How to add your card" links).
+  # Works with GitHub (https://github.com/org/repo) or GitLab; the site
+  # picks the right link format and says "pull request" or "merge request".
+  repo_url: https://github.com/your-org/monash-pp-site   # TODO: replace
+  default_branch: main
+
+# The two top-level research branches, in menu order.
+# Each research area lives in research/<branch>/<slug>.md
+branches:
+  - key: experimental
+    label: Experimental
+  - key: theoretical
+    label: Theoretical
+
+# People categories, in the order they appear on the People page.
+# The "key" is what goes in the `category:` field of a business-card file.
+categories:
+  - key: academic
+    label: Academics
+    singular: Academic
+  - key: postdoc
+    label: Postdocs and fellows
+    singular: Postdoc / fellow
+  - key: phd
+    label: PhD students
+    singular: PhD student
+  - key: honours
+    label: Honours students
+    singular: Honours student
+
+# Heading used for anyone with `former: true`.
+former_label: Previous members
+
+# Project levels, in the order they appear on the Projects page.
+# The "key" is what goes in the `level:` field of a project file.
+project_levels:
+  - key: phd
+    label: PhD projects
+    blurb: Three-and-a-half-year research projects leading to a PhD.
+  - key: honours
+    label: Honours projects
+    blurb: One-year research projects for the Bachelor of Science (Honours).
+  - key: other
+    label: Other projects
+    blurb: Summer research scholarships, undergraduate and Masters projects.

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="hero" aria-labelledby="hero-title">
+  <svg class="hero__event" id="event-display" aria-hidden="true" focusable="false"></svg>
+  <div class="hero__inner">
+    <h1 id="hero-title" class="hero__title">{{ page.get('heading', site.title) }}</h1>
+    <p class="hero__lede">{{ site.tagline }}</p>
+    <p class="hero__actions">
+      <a class="btn btn--light" href="#research">Explore our research</a>
+      <a class="btn btn--ghost" href="{{ root }}projects.html">Find a project</a>
+    </p>
+  </div>
+</section>
+
+<section class="intro wrap">
+  <div class="prose">{{ body }}</div>
+</section>
+
+<section id="research" class="branches wrap" aria-label="Research areas">
+  {% for b in branches %}
+  <div class="branch branch--{{ b.key }}">
+    <h2 class="branch__title">{{ b.label }}</h2>
+    <ul class="branch__list">
+      {% for a in b.areas %}
+      <li class="branch__item">
+        <a class="branch__link" href="{{ root }}{{ a.url }}">
+          <span class="branch__name">{{ a.title }}</span>
+          {% if a.lead_people %}<span class="branch__lead">{% for l in a.lead_people %}{{ l.name }}{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+        </a>
+        <p>{{ a.summary }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="join" aria-labelledby="join-title">
+  <div class="wrap join__inner">
+    <div>
+      <h2 id="join-title">Study with us</h2>
+      <p>We supervise PhD, Honours, Masters and summer students across theory and experiment.
+         Browse open projects, then contact the supervisor directly.</p>
+    </div>
+    <ul class="join__levels">
+      {% for g in level_groups %}
+      <li><a href="{{ root }}projects.html#{{ g.key }}"><span class="join__count">{{ g.projects|length }}</span> {{ g.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="wrap people-teaser">
+  <p>The group has {{ people_count }} current members, from Honours students to professors.
+     <a href="{{ root }}people.html">Meet the people</a></p>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ root }}static/event-display.js" defer></script>{% endblock %}

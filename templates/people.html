@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}People | {{ site.title }}{% endblock %}
+{% block main %}
+<header class="page-head wrap">
+  <h1>{{ page.get('title', 'People') }}</h1>
+  <div class="page-head__lede prose">{{ body }}</div>
+</header>
+
+<div class="wrap">
+  <div class="filter" role="group" aria-label="Show people by research area">
+    <span class="filter__label" id="filter-label">Research area</span>
+    <button type="button" class="chip" aria-pressed="true" data-filter="all">All</button>
+    {% for b in branches %}{% for a in b.areas %}
+    <button type="button" class="chip" aria-pressed="false" data-filter="{{ a.slug }}">{{ a.short_title }}</button>
+    {% endfor %}{% endfor %}
+  </div>
+
+  <nav class="jump" aria-label="Jump to category">
+    {% for g in groups if g.people %}<a href="#{{ g.key }}">{{ g.label }}</a>{% endfor %}
+    {% if former %}<a href="#former">{{ former_label }}</a>{% endif %}
+  </nav>
+
+  {% for g in groups if g.people %}
+  <section class="people-group people-group--{{ g.key }}" id="{{ g.key }}" aria-labelledby="h-{{ g.key }}">
+    <h2 id="h-{{ g.key }}" class="people-group__title">{{ g.label }} <span class="people-group__n">{{ g.people|length }}</span></h2>
+    <div class="cards">
+      {% for p in g.people %}{% include "_card.html" %}{% endfor %}
+    </div>
+    <p class="people-group__empty" hidden>No {{ g.label|lower }} in this area.</p>
+  </section>
+  {% endfor %}
+
+  {% if former %}
+  <section class="people-group people-group--former" id="former" aria-labelledby="h-former">
+    <h2 id="h-former" class="people-group__title">{{ former_label }} <span class="people-group__n">{{ former|length }}</span></h2>
+    <div class="cards">
+      {% for p in former %}{% include "_card.html" %}{% endfor %}
+    </div>
+    <p class="people-group__empty" hidden>No previous members in this area.</p>
+  </section>
+  {% endif %}
+
+  <aside class="add-card">
+    <h2>Joined the group?</h2>
+    <p>Add your own card: copy <code>people/_TEMPLATE.md</code>, fill it in, add a photo to
+       <code>people/photos/</code> and open a {{ site.request_name }}. The site rebuilds once it is merged.</p>
+    <p><a class="btn" href="{{ site.contributing_url }}">Read the step-by-step guide</a></p>
+  </aside>
+</div>
+{% endblock %}

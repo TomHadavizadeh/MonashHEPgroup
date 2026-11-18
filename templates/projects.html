@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Research projects | {{ site.title }}{% endblock %}
+{% block main %}
+<header class="page-head wrap">
+  <h1>{{ page.get('title', 'Research projects') }}</h1>
+  <div class="page-head__lede prose">{{ body }}</div>
+</header>
+
+<div class="wrap">
+  <div class="tabs" role="tablist" aria-label="Project level">
+    {% for g in level_groups %}
+    <a class="tab" role="tab" href="#{{ g.key }}" id="tab-{{ g.key }}" aria-controls="{{ g.key }}"
+       aria-selected="{{ 'true' if loop.first else 'false' }}">{{ g.label }} <span class="tab__n">{{ g.projects|length }}</span></a>
+    {% endfor %}
+  </div>
+
+  {% for g in level_groups %}
+  <section class="level" id="{{ g.key }}" role="tabpanel" aria-labelledby="tab-{{ g.key }}">
+    <h2 class="level__title">{{ g.label }}</h2>
+    <p class="level__blurb">{{ g.blurb }}</p>
+    {% if g.projects %}
+    <div class="projects">
+      {% for pr in g.projects %}{% include "_project.html" %}{% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">No {{ g.label|lower }} are listed right now. Get in touch with a supervisor
+      from the <a href="{{ root }}people.html">People page</a> to discuss ideas.</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

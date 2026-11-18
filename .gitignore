@@ -1,0 +1,6 @@
+public/
+preview/
+.cache/
+__pycache__/
+.venv/
+.DS_Store

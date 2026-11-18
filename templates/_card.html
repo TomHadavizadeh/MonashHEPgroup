@@ -1,0 +1,36 @@
+{# A single business card. Expects `p` (Person) and `root`. #}
+<article class="card card--{{ p.category }}{% if p.former %} card--former{% endif %}" id="{{ p.slug }}"
+         data-areas="{{ p.areas|join(' ') }}">
+  <div class="card__photo">
+    {% if p.photo %}
+    <img src="{{ root }}photos/{{ p.photo }}" alt="" loading="lazy" width="300" height="400">
+    {% else %}
+    <span class="card__initials" aria-hidden="true">{{ p.initials }}</span>
+    {% endif %}
+  </div>
+  <div class="card__body">
+    <header class="card__head">
+      <h3 class="card__name">{{ p.name }}{% if p.pronouns %} <span class="card__pronouns">({{ p.pronouns }})</span>{% endif %}</h3>
+      <p class="card__role">
+        {% if p.former %}{{ p.category_label }}{% if p.years %}, {{ p.years }}{% endif %}
+        {% else %}{% if p.role %}{{ p.role }}{% if p.role|lower != p.category_label|lower %}<span class="card__cat">, {{ p.category_label }}</span>{% endif %}{% else %}{{ p.category_label }}{% endif %}{% endif %}
+      </p>
+    </header>
+    <div class="card__bio">{{ p.bio }}</div>
+    {% if p.former and p.now %}<p class="card__now">Now: {{ p.now }}</p>{% endif %}
+    {% if p.area_objs %}
+    <ul class="card__areas" aria-label="Research areas">
+      {% for a in p.area_objs %}<li><a href="{{ root }}{{ a.url }}">{{ a.short_title }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if p.email or p.website or p.orcid or p.inspire or p.github %}
+    <ul class="card__links">
+      {% if p.email %}<li><a href="mailto:{{ p.email }}">{{ p.email }}</a></li>{% endif %}
+      {% if p.website %}<li><a href="{{ p.website }}">Website</a></li>{% endif %}
+      {% if p.inspire %}<li><a href="{{ p.inspire }}">INSPIRE</a></li>{% endif %}
+      {% if p.orcid %}<li><a href="https://orcid.org/{{ p.orcid }}">ORCID</a></li>{% endif %}
+      {% if p.github %}<li><a href="https://github.com/{{ p.github }}">GitHub</a></li>{% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</article>

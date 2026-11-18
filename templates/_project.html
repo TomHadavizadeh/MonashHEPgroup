@@ -1,0 +1,18 @@
+{# A single project entry. Expects `pr` (Project) and `root`. #}
+<article class="project" id="{{ g.key }}-{{ pr.slug }}" data-areas="{{ pr.areas|join(' ') }}">
+  <h3 class="project__title">{{ pr.title }}</h3>
+  <dl class="project__meta">
+    {% if pr.supervisors %}
+    <div><dt>Supervisor{% if pr.supervisors|length > 1 %}s{% endif %}</dt>
+      <dd>{% for s in pr.supervisors %}{% if s.person %}<a href="{{ root }}people.html#{{ s.person.slug }}">{{ s.name }}</a>{% else %}{{ s.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</dd></div>
+    {% endif %}
+    {% if pr.area_objs %}
+    <div><dt>Area</dt>
+      <dd>{% for a in pr.area_objs %}<a href="{{ root }}{{ a.url }}">{{ a.short_title }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</dd></div>
+    {% endif %}
+    <div><dt>Suitable for</dt>
+      <dd>{% for l in pr.levels %}{{ level_labels[l] }}{% if not loop.last %}, {% endif %}{% endfor %}</dd></div>
+  </dl>
+  <div class="project__body prose">{{ pr.body }}</div>
+  {% if pr.prerequisites %}<p class="project__pre"><strong>Background:</strong> {{ pr.prerequisites }}</p>{% endif %}
+</article>
