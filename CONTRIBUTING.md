@@ -19,8 +19,8 @@ page is rebuilt automatically once it is merged.
    | `category` | yes      | `academic`, `postdoc`, `phd` or `honours` |
    | `role`     |          | Your title, e.g. `Associate Professor`, `ARC DECRA Fellow` |
    | `photo`    |          | File name of your photo in `people/photos/` |
-   | `areas`    |          | Any of `comet`, `lhcb`, `detector-development`, `qcd`, `flavour`, `cosmology` |
-   | `email`, `website`, `inspire`, `orcid`, `github`, `pronouns` | | Optional links and details |
+   | `areas`    |          | Any of `comet`, `lhcb`, `hyper-k`, `detector-development`, `qcd`, `flavour`, `cosmology` |
+   | `email`, `office`, `website`, `inspire`, `orcid`, `github`, `pronouns` | | Optional contact details and links |
 
    Below the second `---`, write **two or three sentences about your research**
    (under about 600 characters).
@@ -61,6 +61,18 @@ Each page in the **Research** menu is a file in `research/experimental/` or
 `research/theoretical/`. Add a new file there and it appears in the menu
 automatically. Use `order:` to control its position and `leads:` to list
 the people who lead it (by their card's file name, e.g. `peter-skands`).
+
+To put a photo behind a research page's title and introduction, save it in
+`research/images/` (a landscape JPG about 1920 px wide and under 500 KB works best)
+and add these lines to the page's header:
+
+```yaml
+image: lhcb.jpg               # file name in research/images/
+image_position: center 45%    # optional: which part of the photo stays in view
+image_credit: "Photo: CERN"   # optional: shown small in the corner
+```
+
+The photo is tinted Monash blue so the white text stays readable.
 
 ## Previewing on your own computer (optional)
 

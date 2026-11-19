@@ -4,6 +4,7 @@ order: 2
 summary: >-
   Why there are three generations of quarks and leptons, and what precision
   measurements of their decays can tell us about physics beyond the Standard Model.
+# image: my-photo.jpg      # optional header photo, saved in research/images/
 leads: [german-valencia]
 ---
 

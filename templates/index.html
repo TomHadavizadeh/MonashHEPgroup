@@ -2,8 +2,9 @@
 {% block main %}
 <section class="hero" aria-labelledby="hero-title">
   <svg class="hero__event" id="event-display" aria-hidden="true" focusable="false"></svg>
+  <svg class="hero__beams" id="event-beams" aria-hidden="true" focusable="false"></svg>
   <div class="hero__inner">
-    <h1 id="hero-title" class="hero__title">{{ page.get('heading', site.title) }}</h1>
+    <h1 id="hero-title" class="hero__title">{# keep "Particle Physics" together on one line (non-breaking space) #}{{ page.get('heading', site.title)|replace(' Physics', ' Physics') }}</h1>
     <p class="hero__lede">{{ site.tagline }}</p>
     <p class="hero__actions">
       <a class="btn btn--light" href="#research">Explore our research</a>

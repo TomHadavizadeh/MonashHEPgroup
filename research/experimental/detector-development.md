@@ -1,9 +1,10 @@
 ---
 title: Detector development
-order: 3
+order: 4
 summary: >-
   Designing and building the instruments behind the next generation of
   experiments: fast trigger electronics, timing detectors and upgrades for LHCb.
+# image: my-photo.jpg      # optional header photo, saved in research/images/
 leads: []          # add people slugs, e.g. [jane-citizen], or plain names
 ---
 

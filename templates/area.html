@@ -2,13 +2,20 @@
 {% block title %}{{ area.title }} | {{ site.title }}{% endblock %}
 {% block description %}{{ area.summary }}{% endblock %}
 {% block main %}
-<header class="page-head page-head--area page-head--{{ area.branch }} wrap">
-  <p class="crumb"><a href="{{ root }}index.html#research">{{ branch_label }} research</a></p>
-  <h1>{{ area.title }}</h1>
-  {% if area.summary %}<p class="page-head__lede">{{ area.summary }}</p>{% endif %}
-  {% if area.lead_people %}
-  <p class="area-lead">Led by {% for l in area.lead_people %}{% if l.person %}<a href="{{ root }}people.html#{{ l.person.slug }}">{{ l.name }}</a>{% else %}{{ l.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+<header class="area-hero area-hero--{{ area.branch }}{% if area.image %} area-hero--image{% endif %}">
+  {% if area.image %}
+  <img class="area-hero__img" src="{{ root }}research/images/{{ area.image }}" alt=""
+       style="object-position: {{ area.image_position }}" fetchpriority="high">
   {% endif %}
+  <div class="page-head page-head--area wrap">
+    <p class="crumb"><a href="{{ root }}index.html#research">{{ branch_label }} research</a></p>
+    <h1>{{ area.title }}</h1>
+    {% if area.summary %}<p class="page-head__lede">{{ area.summary }}</p>{% endif %}
+    {% if area.lead_people %}
+    <p class="area-lead">Led by {% for l in area.lead_people %}{% if l.person %}<a href="{{ root }}people.html#{{ l.person.slug }}">{{ l.name }}</a>{% else %}{{ l.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+    {% endif %}
+  </div>
+  {% if area.image and area.image_credit %}<p class="area-hero__credit">{{ area.image_credit }}</p>{% endif %}
 </header>
 
 <div class="wrap area-layout">

@@ -64,6 +64,33 @@
     });
   }
 
+  /* ---- Compact cards: show "More" only when the bio is cut off ---------- */
+  var compact = document.querySelectorAll(".card--compact");
+  if (compact.length) {
+    var checkOverflow = function () {
+      compact.forEach(function (card) {
+        var bio = card.querySelector(".card__bio");
+        var btn = card.querySelector(".card__more");
+        if (!bio || !btn || card.classList.contains("is-expanded")) return;
+        btn.hidden = bio.scrollHeight <= bio.clientHeight + 1;
+      });
+    };
+    compact.forEach(function (card) {
+      var btn = card.querySelector(".card__more");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var open = card.classList.toggle("is-expanded");
+        btn.setAttribute("aria-expanded", String(open));
+        btn.textContent = open ? "Less" : "More";
+      });
+    });
+    checkOverflow();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(checkOverflow);
+    var rt;
+    window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(checkOverflow, 150); });
+    chips.forEach(function (chip) { chip.addEventListener("click", function () { setTimeout(checkOverflow, 0); }); });
+  }
+
   /* ---- Projects: tabs by level (falls back to plain anchors without JS) -- */
   var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab[role=tab]"));
   if (tabs.length) {

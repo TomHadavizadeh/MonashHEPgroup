@@ -19,10 +19,11 @@ photo: firstname-lastname.jpg           # optional: file in people/photos/ (squa
                                         #   Without a photo your initials are shown.
 
 areas: [qcd]                            # optional: research areas you work in. Choose from:
-                                        #   comet, lhcb, detector-development,
+                                        #   comet, lhcb, hyper-k, detector-development,
                                         #   qcd, flavour, cosmology
 
 email: firstname.lastname@monash.edu    # optional
+office: 135A                            # optional: room number
 website: https://example.org            # optional
 inspire: https://inspirehep.net/authors/...   # optional
 orcid: 0000-0000-0000-0000              # optional (just the number)

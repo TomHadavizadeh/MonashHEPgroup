@@ -5,6 +5,7 @@ Build the Monash Particle Physics website.
     python build.py            # build the site into ./public
     python build.py --check    # validate content only (used on merge/pull requests)
     python build.py --serve    # build, then serve on http://localhost:8000
+    python build.py --no-fetch # build without contacting monash.edu (offline)
 
 Content lives in plain Markdown files with a YAML header ("front matter"):
 
@@ -30,6 +31,8 @@ from pathlib import Path
 
 import markdown
 import yaml
+
+import seminars
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 from markupsafe import Markup
 
@@ -41,14 +44,15 @@ BIO_SOFT_LIMIT = 600  # characters; longer bios get a warning, not an error
 
 PERSON_FIELDS = {
     "name", "category", "role", "photo", "areas", "email", "website",
-    "orcid", "inspire", "github", "former", "years", "now", "order", "draft",
+    "orcid", "inspire", "github", "office", "former", "years", "now", "order", "draft",
     "pronouns",
 }
 PROJECT_FIELDS = {
     "title", "level", "areas", "supervisors", "order", "draft", "status",
     "prerequisites",
 }
-AREA_FIELDS = {"title", "summary", "leads", "order", "links", "draft", "short_title"}
+AREA_FIELDS = {"title", "summary", "leads", "order", "links", "draft", "short_title",
+               "image", "image_position", "image_credit"}
 
 
 # --------------------------------------------------------------------------- #
@@ -142,6 +146,9 @@ class Area:
     leads: list[str]
     links: list[dict]
     order: int
+    image: str | None = None            # header photo, in research/images/
+    image_position: str = "center"      # CSS object-position, e.g. "center 30%"
+    image_credit: str | None = None
     people: list = field(default_factory=list)
     projects: list = field(default_factory=list)
     lead_people: list = field(default_factory=list)
@@ -165,6 +172,7 @@ class Person:
     orcid: str | None
     inspire: str | None
     github: str | None
+    office: str | None
     pronouns: str | None
     former: bool
     years: str | None
@@ -172,6 +180,7 @@ class Person:
     order: int
     bio: Markup
     initials: str
+    compact: bool = False
     area_objs: list = field(default_factory=list)
 
 
@@ -214,6 +223,26 @@ def load_areas(cfg: dict, problems: Problems) -> dict[str, Area]:
             if not meta.get("title"):
                 problems.error(path, "missing 'title'.")
                 continue
+            image = meta.get("image")
+            if image:
+                image = str(image).strip()
+                ipath = ROOT / "research" / "images" / image
+                if "/" in image or "\\" in image:
+                    problems.error(path, "'image' should be just the file name, saved in research/images/.")
+                    continue
+                if ipath.suffix.lower() not in PHOTO_EXT:
+                    problems.error(path, f"image must be one of {', '.join(sorted(PHOTO_EXT))}.")
+                    continue
+                if not ipath.exists():
+                    problems.error(path, f"image 'research/images/{image}' was not found.")
+                    continue
+                if ipath.stat().st_size > 1_500_000:
+                    problems.warn(path, f"header image is {ipath.stat().st_size // 1024} KB; "
+                                        "about 1920 px wide and under 500 KB loads quickly.")
+            position = str(meta.get("image_position") or "center")
+            if not re.fullmatch(r"[a-z0-9.%\s-]+", position):
+                problems.error(path, "'image_position' should look like 'center' or 'center 30%'.")
+                continue
             areas[slug] = Area(
                 slug=slug,
                 branch=branch,
@@ -224,9 +253,12 @@ def load_areas(cfg: dict, problems: Problems) -> dict[str, Area]:
                 leads=[str(x) for x in as_list(meta.get("leads"))],
                 links=as_list(meta.get("links")),
                 order=int(meta.get("order", 100)),
+                image=image or None,
+                image_position=position,
+                image_credit=str(meta["image_credit"]).strip() if meta.get("image_credit") else None,
             )
     for path in (ROOT / "research").glob("*/"):
-        if path.is_dir() and path.name not in branch_keys:
+        if path.is_dir() and path.name not in branch_keys and path.name != "images":
             problems.warn(path, f"folder is not a branch listed in config.yml "
                                 f"({', '.join(branch_keys)}) and will be ignored.")
     return areas
@@ -307,6 +339,7 @@ def load_people(cfg: dict, areas: dict[str, Area], problems: Problems) -> list[P
             orcid=meta.get("orcid"),
             inspire=meta.get("inspire"),
             github=meta.get("github"),
+            office=str(meta["office"]) if meta.get("office") else None,
             pronouns=meta.get("pronouns"),
             former=former,
             years=str(meta["years"]) if meta.get("years") else None,
@@ -314,6 +347,8 @@ def load_people(cfg: dict, areas: dict[str, Area], problems: Problems) -> list[P
             order=int(meta.get("order", 100)),
             bio=md_to_html(bio_text),
             initials=initials(name),
+            compact=bool(cfg.get("former_compact")) if former
+                    else bool(cats[cat].get("compact", False)),
         ))
     return people
 
@@ -387,7 +422,8 @@ def resolve_lead(token: str, people_by_slug: dict) -> dict:
 # --------------------------------------------------------------------------- #
 #  Build
 # --------------------------------------------------------------------------- #
-def build(out: Path, check_only: bool = False) -> int:
+def build(out: Path, check_only: bool = False, fetch_seminars: bool = True,
+          seminars_html: Path | None = None) -> int:
     cfg = yaml.safe_load((ROOT / "config.yml").read_text(encoding="utf-8"))
     problems = Problems()
 
@@ -484,6 +520,10 @@ def build(out: Path, check_only: bool = False) -> int:
     render("people.html", "people.html", page=people_meta, body=people_body, nav="people",
            groups=groups, former=former, areas=areas)
 
+    seminars_meta, seminars_body = load_page("seminars", problems)
+    render("seminars.html", "seminars.html", page=seminars_meta, body=seminars_body,
+           nav="seminars", seminars_cfg=cfg.get("seminars") or {})
+
     projects_meta, projects_body = load_page("projects", problems)
     render("projects.html", "projects.html", page=projects_meta, body=projects_body,
            nav="projects", level_groups=level_groups)
@@ -493,6 +533,12 @@ def build(out: Path, check_only: bool = False) -> int:
         render("area.html", a.url, area=a, branch_label=branch_label, nav="research")
 
     shutil.copytree(ROOT / "static", out / "static")
+    # Seminar list: scraped from the School's talks page at build time (never fails the build).
+    seminars.collect(cfg, out, fetch_live=fetch_seminars, html_file=seminars_html)
+    area_images = ROOT / "research" / "images"
+    if area_images.exists():
+        shutil.copytree(area_images, out / "research" / "images",
+                        ignore=shutil.ignore_patterns(".*", "README*"))
     photos = ROOT / "people" / "photos"
     if photos.exists():
         shutil.copytree(photos, out / "photos",
@@ -515,9 +561,14 @@ def main() -> None:
     ap.add_argument("--out", default="public", help="output folder (default: public)")
     ap.add_argument("--serve", action="store_true", help="serve the built site locally")
     ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--no-fetch", action="store_true",
+                    help="don't fetch the seminar list from monash.edu (offline build)")
+    ap.add_argument("--seminars-html", type=Path, metavar="FILE",
+                    help="read the talks page from a saved HTML file instead of the web")
     args = ap.parse_args()
     out = (ROOT / args.out).resolve()
-    code = build(out, check_only=args.check)
+    code = build(out, check_only=args.check, fetch_seminars=not args.no_fetch,
+                 seminars_html=args.seminars_html)
     if code == 0 and args.serve and not args.check:
         serve(out, args.port)
     sys.exit(code)
