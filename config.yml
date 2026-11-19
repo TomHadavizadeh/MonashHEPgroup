@@ -19,8 +19,12 @@ site:
   # Link to the repository (used for the "How to add your card" links).
   # Works with GitHub (https://github.com/org/repo) or GitLab; the site
   # picks the right link format and says "pull request" or "merge request".
-  repo_url: https://github.com/your-org/monash-pp-site   # TODO: replace
+  repo_url: https://github.com/TomHadavizadeh/MonashHEPgroup   # TODO: replace
   default_branch: main
+  # Public address of the published site, e.g. https://your-org.github.io/monash-pp-site
+  # Used as a fallback: if monash.edu can't be read during a build, the seminar
+  # list currently on the live site is kept instead of being emptied.
+  url: https://TomHadavizadeh.github.io/MonashHEPgroup                                                    # TODO: set after first deploy
 
 # The two top-level research branches, in menu order.
 # Each research area lives in research/<branch>/<slug>.md
@@ -64,3 +68,17 @@ project_levels:
   - key: other
     label: Other projects
     blurb: Summer research scholarships, undergraduate and Masters projects.
+
+# Seminars page. The list is read from the School's talks page each time the site
+# is built (the CI pipeline rebuilds on a schedule), and talks are split into
+# "upcoming" and "past" in the visitor's browser when the page loads.
+seminars:
+  sources:
+    - https://www.monash.edu/science/schools/physics/Physics-and-Astronomy-news-and-events/talks
+    # Add past-year pages to show more history, e.g.
+    # - https://www.monash.edu/science/schools/physics/Physics-and-Astronomy-news-and-events/talks/seminars-2025
+  match:                         # a talk is included if its series label contains any of these
+    - PARTICLE PHYSICS SEMINAR
+    - HEP SEMINAR                # older name for the same series
+  past_limit: 12                 # past talks shown before "Show all"
+  calendar_name: Monash Particle Physics Seminars

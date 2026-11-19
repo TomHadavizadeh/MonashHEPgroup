@@ -12,7 +12,7 @@ title: A short, descriptive project title     # required
 level: [phd, honours]          # required: one or more of phd | honours | other
                                #   ("other" = summer, undergraduate, Masters)
 
-areas: [qcd]                   # optional: comet, lhcb, detector-development,
+areas: [qcd]                   # optional: comet, lhcb, hyper-k, detector-development,
                                #   qcd, flavour, cosmology
 
 supervisors: [peter-skands]    # optional: people slugs (linked to their card)

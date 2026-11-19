@@ -188,31 +188,54 @@ h3 { font-size: 1.15rem; }
   .megamenu__col + .megamenu__col { margin-top: 0.75rem; }
 }
 
-/* ---------- Hero / event display (Monash blue, dark gradient) ------------- */
+/* ---------- Hero / event display (centred collision on Monash blue) ------ */
 .hero {
   position: relative; overflow: hidden; isolation: isolate;
   background:
-    radial-gradient(ellipse 60% 90% at 72% 50%, rgba(18,18,86,0) 0%, rgba(18,18,86,0) 45%, rgba(18,18,86,.35) 100%),
+    radial-gradient(ellipse 75% 85% at 50% 50%, rgba(18,18,86,0) 0%, rgba(18,18,86,0) 50%, rgba(18,18,86,.38) 100%),
     var(--blue);
-  color: #fff; min-height: clamp(28rem, 70vh, 38rem);
-  display: flex; align-items: center;
+  color: #fff; min-height: clamp(30rem, 78vh, 44rem);
+  display: flex; align-items: center; justify-content: center;
 }
-.hero__event { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
-.hero__inner { max-width: var(--wrap); margin-inline: auto; padding: 4rem var(--gutter); width: 100%; }
+.hero__event { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+/* Soft Monash-blue glow behind the (right-aligned) text, so it reads over the tracks. */
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse min(34rem, 42%) min(16rem, 34%) at 76% 50%,
+    rgba(0,109,174,.85) 0%, rgba(0,109,174,.62) 45%, rgba(0,109,174,0) 100%);
+}
+.hero__beams { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.hero__inner {
+  position: relative; z-index: 1;
+  max-width: var(--wrap); margin-inline: auto; padding: 4rem var(--gutter); width: 100%;
+  text-align: right;
+}
 .hero__title {
-  max-width: 12ch; font-size: clamp(2.7rem, 7vw, 5rem); font-weight: 800;
-  line-height: 1; letter-spacing: -0.025em; margin-bottom: 0.45em;
+  font-size: clamp(2.7rem, 7vw, 5.2rem); font-weight: 800; text-wrap: balance;
+  max-width: 8.5em; line-height: 1; letter-spacing: -0.025em; margin: 0 0 0.4em auto;
+  text-shadow: 0 2px 24px rgba(0,60,100,.55);
 }
-.hero__lede { max-width: 31rem; font-size: 1.15rem; margin: 0 0 1.75rem; }
-.hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; }
+.hero__lede { max-width: 30rem; font-size: 1.15rem; text-wrap: pretty; margin: 0 0 1.75rem auto; text-shadow: 0 1px 14px rgba(0,60,100,.7); }
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.75rem; margin: 0; }
 .hero :focus-visible { outline-color: #fff; }
+.hero__replay {
+  position: absolute; left: var(--gutter); bottom: 1.1rem;
+  font: inherit; font-size: 0.82rem; font-weight: 500; color: #fff; cursor: pointer;
+  background: rgba(0,0,0,.12); border: 1px solid rgba(255,255,255,.45); padding: 0.35rem 0.8rem;
+}
+.hero__replay:hover { background: rgba(255,255,255,.14); border-color: #fff; }
 
 .ed-layer { fill: none; stroke: rgba(255,255,255,.16); }
 .ed-track { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-@media (max-width: 760px) {
-  .hero { min-height: 30rem; }
-  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,109,174,.85), rgba(0,109,174,.25)); z-index: -1; }
+@media (max-width: 759px) {
+  .hero { min-height: 32rem; }
+  .hero__inner { text-align: center; }
+  .hero__title { margin-inline: auto; max-width: none; }
+  .hero__lede { margin-inline: auto; }
+  .hero__actions { justify-content: center; }
+  .hero__replay { left: auto; right: var(--gutter); }
+  .hero::after { background: radial-gradient(ellipse 95% 38% at 50% 50%, rgba(0,109,174,.85) 0%, rgba(0,109,174,.6) 50%, rgba(0,109,174,0) 100%); }
 }
 
 /* ---------- Home sections -------------------------------------------------- */
@@ -255,7 +278,32 @@ h3 { font-size: 1.15rem; }
 .crumb { margin: 0 0 0.75rem; font-weight: 500; }
 .crumb a { text-decoration: none; }
 .crumb a::before { content: "‹ "; }
-.page-head--area { margin-bottom: 2.5rem; padding-bottom: 2.25rem; border-bottom: 4px solid var(--blue); }
+/* Research-area header: plain, or with a photo behind the introduction (down to the blue line). */
+.area-hero { position: relative; isolation: isolate; margin-bottom: 2.5rem; border-bottom: 4px solid var(--blue); }
+.page-head--area { padding-bottom: 2.25rem; }
+.area-hero--image { color: #fff; overflow: hidden; }
+.area-hero--image .page-head--area { padding-block: clamp(4rem, 10vw, 7.5rem) clamp(2.5rem, 5vw, 3.5rem); }
+.area-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.area-hero--image::before {   /* dark Monash-blue tint, strongest behind the text */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(10,22,52,.88) 0%, rgba(0,56,100,.72) 45%, rgba(0,80,140,.28) 100%),
+    linear-gradient(0deg, rgba(10,22,52,.45) 0%, rgba(10,22,52,0) 45%);
+}
+.area-hero--image h1 { color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,.35); }
+.area-hero--image .page-head__lede { color: #E8EEF4; max-width: 36rem; text-shadow: 0 1px 12px rgba(0,0,0,.45); }
+.area-hero--image .crumb a { color: #fff; }
+.area-hero--image .crumb a:hover { color: var(--heritage); }
+.area-hero--image .area-lead, .area-hero--image .area-lead a { color: #fff; }
+.area-hero--image .area-lead a:hover { color: var(--heritage); }
+.area-hero--image :focus-visible { outline-color: #fff; }
+.area-hero__credit {
+  position: absolute; right: var(--gutter); bottom: 0.5rem; margin: 0;
+  font-size: 0.72rem; color: rgba(255,255,255,.75);
+}
+@media (max-width: 760px) {
+  .area-hero--image::before { background: linear-gradient(0deg, rgba(10,22,52,.9) 0%, rgba(0,56,100,.7) 60%, rgba(0,80,140,.45) 100%); }
+}
 .area-lead { margin: 1rem 0 0; font-weight: 600; }
 
 /* ---------- People: filter --------------------------------------------------- */
@@ -453,4 +501,43 @@ h3 { font-size: 1.15rem; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ---------- Seminars ------------------------------------------------------- */
+.sem-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin: 1.25rem 0 0; }
+.sem-status { color: var(--ink-2); font-size: 0.92rem; margin: 0 0 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.sem-section { margin-bottom: 3rem; }
+.sem-section h2 { padding-bottom: 0.35em; border-bottom: 4px solid var(--blue); }
+.sem-list { display: grid; gap: 0; }
+.seminar {
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1.5rem;
+  padding: 1.4rem 0; border-bottom: 1px solid var(--rule);
+}
+.seminar__date {
+  align-self: start; display: flex; flex-direction: column; align-items: center;
+  padding: 0.6rem 0.4rem 0.55rem; background: var(--blue); color: #fff; line-height: 1.05;
+}
+.seminar__day { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+.seminar__mon { font-size: 0.95rem; font-weight: 600; }
+.seminar__yr { font-size: 0.78rem; opacity: 0.85; margin-top: 0.15rem; }
+.seminar--past .seminar__date { background: var(--grey-3); color: var(--ink); }
+.seminar__flag {
+  display: inline-block; margin: 0 0 0.45rem; padding: 0.1rem 0.55rem;
+  font-size: 0.78rem; font-weight: 700; background: var(--heritage); color: var(--blueberry);
+}
+.seminar__title { font-size: 1.22rem; margin: 0 0 0.35rem; }
+.seminar__speaker { margin: 0 0 0.35rem; }
+.seminar__meta { margin: 0; color: var(--ink-2); font-size: 0.93rem; }
+.seminar__links { list-style: none; margin: 0.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9rem; }
+.seminar--next { background: var(--soft); box-shadow: -1rem 0 0 var(--soft), 1rem 0 0 var(--soft); }
+.sem-list--past .seminar { padding: 1rem 0; }
+.sem-list--past .seminar__title { font-size: 1.08rem; }
+.sem-more {
+  margin-top: 1rem; font: inherit; font-weight: 600; color: var(--blue); background: none;
+  border: 2px solid var(--blue); padding: 0.55rem 1rem; cursor: pointer;
+}
+.sem-more:hover { background: var(--blue); color: #fff; }
+@media (max-width: 520px) {
+  .seminar { grid-template-columns: 4.25rem minmax(0, 1fr); gap: 1rem; }
+  .seminar__day { font-size: 1.6rem; }
 }

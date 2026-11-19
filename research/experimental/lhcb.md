@@ -5,6 +5,9 @@ order: 2
 summary: >-
   Precision measurements of particles containing beauty and charm quarks at
   CERN's Large Hadron Collider, testing the Standard Model at very high energy scales.
+image: lhcb.jpg            # header photo, saved in research/images/
+image_position: center 45%   # optional: which part of the photo to keep in view
+image_credit: "Photo: CERN"  # TODO: confirm the photo's source and credit line
 leads: []          # add people slugs, e.g. [jane-citizen], or plain names
 links:
   - title: LHCb collaboration

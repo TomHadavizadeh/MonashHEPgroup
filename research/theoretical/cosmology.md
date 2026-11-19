@@ -5,6 +5,7 @@ order: 3
 summary: >-
   Dark matter, the matter–antimatter asymmetry and phase transitions in the
   early Universe: where particle physics meets cosmology.
+# image: my-photo.jpg      # optional header photo, saved in research/images/
 leads: [csaba-balazs]
 links:
   - title: GAMBIT collaboration

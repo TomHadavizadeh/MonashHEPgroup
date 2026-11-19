@@ -5,6 +5,7 @@ order: 1
 summary: >-
   The theory of the strong force and how quarks and gluons become the jets
   and hadrons seen in detectors, built into the PYTHIA event generator.
+# image: my-photo.jpg      # optional header photo, saved in research/images/
 leads: [peter-skands]
 links:
   - title: PYTHIA event generator

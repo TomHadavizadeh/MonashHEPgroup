@@ -5,6 +5,7 @@ order: 1
 summary: >-
   Searching for muons that turn into electrons, a process the Standard Model
   all but forbids, using the world's most intense muon source at J-PARC in Japan.
+# image: my-photo.jpg      # optional header photo, saved in research/images/
 leads: []          # add people slugs, e.g. [jane-citizen], or plain names
 links:
   - title: COMET collaboration

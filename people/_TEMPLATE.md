@@ -19,7 +19,7 @@ photo: firstname-lastname.jpg           # optional: file in people/photos/ (squa
                                         #   Without a photo your initials are shown.
 
 areas: [qcd]                            # optional: research areas you work in. Choose from:
-                                        #   comet, lhcb, detector-development,
+                                        #   comet, lhcb, hyper-k, detector-development,
                                         #   qcd, flavour, cosmology
 
 email: firstname.lastname@monash.edu    # optional

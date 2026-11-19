@@ -11,9 +11,9 @@ Python script (`build.py`). It can be published with **GitHub Pages** or
 
 ```
 config.yml                 site title, contact, people categories, project levels
-content/                   intro text for the Home, People and Projects pages
+content/                   intro text for the Home, People, Seminars and Projects pages
 research/
-  experimental/            one page per area: comet.md, lhcb.md, detector-development.md
+  experimental/            one page per area: comet.md, lhcb.md, hyper-k.md, detector-development.md
   theoretical/             qcd.md, flavour.md, cosmology.md
 people/                    one business card per person (firstname-lastname.md)
   photos/                  card photos
@@ -23,6 +23,8 @@ projects/                  one file per PhD / Honours / other project
 templates/                 Jinja2 HTML templates
 static/                    CSS, JavaScript, fonts, favicon
 build.py                   validates content and writes the site to public/
+seminars.py                reads the School talks page and builds the seminar list
+tests/                     tests for the seminar reader (with a sample talks page)
 .github/workflows/pages.yml  GitHub: checks pull requests, deploys main to GitHub Pages
 .gitlab-ci.yml             GitLab: checks merge requests, deploys main to GitLab Pages
 ```
@@ -39,10 +41,37 @@ pip install -r requirements.txt
 python build.py            # writes public/
 python build.py --serve    # builds and serves at http://localhost:8000
 python build.py --check    # validation only (what CI runs on merge requests)
+python build.py --no-fetch # offline build: skip reading the seminar list from monash.edu
+python tests/test_seminars.py   # test the seminar reader
 ```
 
 The site uses relative links throughout, so it works at any URL, including
 a GitLab Pages sub-path, and even opened straight from disk.
+
+## Seminars page
+
+The Seminars page lists every talk labelled **PARTICLE PHYSICS SEMINAR** (or the
+older **HEP SEMINAR**) on the School's
+[Seminars and Colloquia page](https://www.monash.edu/science/schools/physics/Physics-and-Astronomy-news-and-events/talks).
+
+- Browsers can't read monash.edu from another website (cross-origin rules), so
+  the list is read by `seminars.py` **when the site is built**. It is saved as
+  `data/seminars.json`, plus a calendar feed, `seminars.ics`.
+- CI rebuilds the site **every 6 hours** (GitHub: built into the workflow;
+  GitLab: add a pipeline schedule). To refresh straight away, use **Run workflow**
+  on GitHub's Actions tab, or **Run pipeline** on GitLab.
+- When someone opens the page, it loads `data/seminars.json` and sorts the talks
+  into **Upcoming** and **Past** using the current time, so a talk moves to
+  Past as soon as it finishes, even between rebuilds. Times are shown in Melbourne time.
+- **If monash.edu can't be read** (it's down, or its layout changed), the build
+  doesn't fail. It keeps the list from the live site (set `site.url` in
+  `config.yml`) and the page says the list may be out of date. The build log
+  shows a `warning: seminars:` line.
+- Which series are included, and which pages are read, are set under
+  `seminars:` in `config.yml`. Add a past-year page (e.g. `.../talks/seminars-2025`)
+  to `sources` to show more history.
+- On GitHub, scheduled workflows pause after 60 days without any commits to the
+  repository; GitHub emails the repository owner first, and one click re-enables them.
 
 ## Setting up on GitHub
 
@@ -77,6 +106,11 @@ a GitLab Pages sub-path, and even opened straight from disk.
 
 ## Before going live
 
+- After the first deploy, set `site.url` in `config.yml` to the published address, so the
+  seminar list is kept if monash.edu is ever unreachable during a rebuild.
+- Check the first live build log for a `seminars:` line. The reader was written from the
+  talks page's visible layout and tested on a sample; if it reports "no talks recognised",
+  save the page (File → Save as…, HTML only) and test with `python build.py --seminars-html page.html`.
 - Delete `people/example-former-member.md` once a real previous member has a card.
   (While no one has `former: true`, the Previous members section is hidden.)
 - Ask members to check their own cards. Research descriptions were drafted from
